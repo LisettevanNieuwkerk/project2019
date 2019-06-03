@@ -13,12 +13,12 @@ Lisette van Nieuwkerk
   ![Image 1](visual_sketches/part_1.png)
   ![Image 2](visual_sketches/part_2.png)
   * Main features:
-    MVP: worldmap + piechart + scatterplot
-    Optional: barchart + word cloud
+    * MVP: worldmap + piechart + scatterplot
+    * Optional: barchart + word cloud
 
 3. Prerequisites
   * Data sources: https://www.kaggle.com/zynicide/wine-reviews/downloads/wine-reviews.zip/4#winemag-data-130k-v2.csv
   * External components: d3.js, datamaps.js, d3-tip
   * Similar visualisation: https://public.tableau.com/s/gallery/asylum-seekers-europe
-    Connect a interactive world map to charts and click to update charts.
-  * Possible technical problems: Linking all charts properly to each other and update by clicking. Also fit data (130.000 reviews) in charts. 
+      * Connect a interactive world map to charts and click to update charts.
+  * Possible technical problems: Linking all charts properly to each other and update by clicking. Also fit data (130.000 reviews) in charts.
