@@ -10,8 +10,8 @@
 2. Solution
   * Show wine production world wide and give an overview of quality, price, grape type and descriptions of wines per country over the years.
   * Visual sketch
-  ![Image 1](visual_sketches/part_1.png)
-  ![Image 2](visual_sketches/part_2.png)
+  ![Image 1](doc/part_1.png)
+  ![Image 2](doc/part_2.png)
   * Main features:
     * MVP: worldmap + piechart + scatterplot
     * Optional: barchart + word cloud
