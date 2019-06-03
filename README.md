@@ -1,7 +1,7 @@
 # project2019
-Programmeerproject 2019
-Lisette van Nieuwkerk
-10590919
+* Programmeerproject 2019
+* Lisette van Nieuwkerk
+* 10590919
 
 1. Problem statement
   * Problem: Obtain information about the wine production in countries, concerning the amount, prices, grape types and quality over the years. The product will help people discover where the best quality wines are produced over the years. As well as which wines have the best price-quality ratio over the years, where they come from and which grape type is used.
