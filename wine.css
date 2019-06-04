@@ -1,0 +1,11 @@
+/*
+Name: Lisette van Nieuwkerk
+Studentnumber: 10590919
+*/
+
+/* World map */
+#container {
+    height: 800px;
+    width: 1200px;
+    position: relative;
+}
