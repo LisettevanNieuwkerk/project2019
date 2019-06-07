@@ -64,7 +64,7 @@ if __name__ == "__main__":
         # Check if one number in title between 1990 - 2017
         if len(numbers) == 1:
             possible_year = int(numbers[0])
-            if possible_year > 1990 and possible_year < 2017:
+            if possible_year >= 1990 and possible_year < 2017:
                 year = possible_year
 
         # When more number look for years between 1990 - 2017
@@ -73,7 +73,7 @@ if __name__ == "__main__":
             for number in numbers:
                 if len(number) == 4:
                     possible_year = int(number)
-                    if possible_year > 1990 and possible_year < 2017:
+                    if possible_year >= 1990 and possible_year < 2017:
                         # Select highest year
                         if first == True:
                             year = possible_year
