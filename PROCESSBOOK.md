@@ -9,3 +9,11 @@
 
 * 5/6
     * Done with preprocessing data in Python, added year and code to dataframe. Made function to calculate average rating and define colours in map for country. 
+
+* 6/6
+    * Create timeline for datamap and adapt map to data.
+
+* 7/6
+    * Added scatterplot and connected to worldmap and timeline. 
+    * Problem: amount of data in scatterplot
+    * Feedback: do not plot seperate wines on scatterplot but groups and make it possible to zoom in on price.

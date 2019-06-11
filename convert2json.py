@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # Read csv into dataframe
     df = pd.read_csv(INPUT_FILE1)
 
-    # Filter columns, empty values and duplicates
+    # Filter columns, empty values, duplicates
     columns = ['country', 'description', 'points', 'price', 'title', 'variety']
     df = df.filter(items=columns)
     df = df.drop_duplicates()
