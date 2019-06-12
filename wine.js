@@ -1,8 +1,9 @@
 //Name: Lisette van Nieuwkerk
 //Studentnumber: 10590919
 
-import { drawLegend, defineValuesCountries,drawMap } from "./parts/datamap.js";
-import { minMax, drawScatterBasis, drawScatter } from "./parts/scatterplot.js";
+import { drawLegend, defineValuesCountries, drawMap } from "./parts/datamap.js";
+import { minMax, idled, drawScatterBasis, groupWine, drawScatter } from "./parts/scatterplot.js";
+import { drawPieBasis, getVarietyValues, drawPieChart } from "./parts/piechart.js";
 var fileName = "data/wine-reviews.json";
 
 /* Load page */
@@ -10,6 +11,7 @@ window.onload = function() {
 
     d3v5.json(fileName).then(function(dataset){
         var country = 'all'
+        var variety = 'all'
 
         // Set color scale for map
         var color = d3v5.scaleOrdinal()
@@ -35,16 +37,17 @@ window.onload = function() {
 
         // Draw map and scatter
         var svg = drawScatterBasis();
+        var svg2 = drawPieBasis();
+
         drawMap(dataset, years, svg, country);
+        drawPieChart(dataset, country, years, svg2);
         drawScatter(dataset, country, years, svg);
         
 
         // Update map with slider
         slider.noUiSlider.on('change.one', function (values) {
-            country = window.country;
             // Get new range from slider 
             years = [parseInt(values[0]), parseInt(values[1])] 
-            console.log(country);
             
             // Remove old worldmap
             var children = document.getElementById("container");
@@ -53,10 +56,10 @@ window.onload = function() {
             }
 
             // Draw net map
-            drawMap(dataset, years, svg, country);
+            drawMap(dataset, years, svg, window.country);
             
             //Draw scatter
-            drawScatter(dataset, country, years, svg);   
+            drawScatter(dataset, window.country, years, svg);   
         });
         
     });

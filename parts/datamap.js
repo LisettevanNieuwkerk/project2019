@@ -1,4 +1,6 @@
 /* Function to draw legend */
+import { drawScatter } from "./scatterplot.js";
+
 export function drawLegend(color) {
     // Draw svg figure for legend
     var width = 1183;
@@ -128,9 +130,7 @@ export function drawMap(dataset, years, svg, country) {
                 values = data[geo.id];
                 if (values != undefined) {
                     window.country = data[geo.id]['country'];
-                    console.log(window.country);
-                    country = window.country;
-                    // drawScatter(dataset, country, years, svg);
+                    drawScatter(dataset, window.country, years, svg);
                 }
             })
         }   
