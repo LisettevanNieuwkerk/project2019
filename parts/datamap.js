@@ -1,5 +1,6 @@
 /* Function to draw legend */
 import { drawScatter } from "./scatterplot.js";
+import { drawCircularPacking } from "./piechart.js";
 
 export function drawLegend(color) {
     // Draw svg figure for legend
@@ -98,10 +99,9 @@ export function defineValuesCountries(dataset, years) {
 
 
 /* Draw datamap */
-export function drawMap(dataset, years, svg, country) {
+export function drawMap(dataset, years, country, svgScatter, svgCirclePacking) {
     var values;
     var data = defineValuesCountries(dataset, years);
-    
     // Draw datamap
     var basic = new Datamap({
         element: document.getElementById("container"),
@@ -130,7 +130,8 @@ export function drawMap(dataset, years, svg, country) {
                 values = data[geo.id];
                 if (values != undefined) {
                     window.country = data[geo.id]['country'];
-                    drawScatter(dataset, window.country, years, svg);
+                    drawScatter(dataset, years, window.country, window.variety, svgScatter);
+                    drawCircularPacking(dataset, years, window.country, svgScatter, svgCirclePacking);   
                 }
             })
         }   

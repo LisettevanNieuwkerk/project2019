@@ -2,16 +2,17 @@
 //Studentnumber: 10590919
 
 import { drawLegend, defineValuesCountries, drawMap } from "./parts/datamap.js";
-import { minMax, idled, drawScatterBasis, groupWine, drawScatter } from "./parts/scatterplot.js";
-import { drawPieBasis, getVarietyValues, drawPieChart } from "./parts/piechart.js";
+import { minMax, groupWine, idled, drawScatterBasis, drawScatter } from "./parts/scatterplot.js";
+import { drawCircularPackingBasis, getVarietyValues, drawCircularPacking } from "./parts/piechart.js";
+
 var fileName = "data/wine-reviews.json";
 
 /* Load page */
 window.onload = function() {
-
     d3v5.json(fileName).then(function(dataset){
-        var country = 'all'
-        var variety = 'all'
+        // Set variables
+        window.country = 'all';
+        window.variety = 'all';
 
         // Set color scale for map
         var color = d3v5.scaleOrdinal()
@@ -32,19 +33,16 @@ window.onload = function() {
             }
         });
 
-        // Draw legend of datamap
+        // Draw map, legend, scatterplot and circlepacking
+        var svgScatter = drawScatterBasis();
+        var svgCirclePacking = drawCircularPackingBasis();
+        drawMap(dataset, years, window.country, svgScatter, svgCirclePacking);
         drawLegend(color);
-
-        // Draw map and scatter
-        var svg = drawScatterBasis();
-        var svg2 = drawPieBasis();
-
-        drawMap(dataset, years, svg, country);
-        drawPieChart(dataset, country, years, svg2);
-        drawScatter(dataset, country, years, svg);
+        drawCircularPacking(dataset, years, window.country, svgScatter, svgCirclePacking,);
+        drawScatter(dataset, years, window.country, window.variety, svgScatter);
         
 
-        // Update map with slider
+        // Update visualisations by years
         slider.noUiSlider.on('change.one', function (values) {
             // Get new range from slider 
             years = [parseInt(values[0]), parseInt(values[1])] 
@@ -55,12 +53,11 @@ window.onload = function() {
                 children.removeChild(children.firstChild);
             }
 
-            // Draw net map
-            drawMap(dataset, years, svg, window.country);
-            
-            //Draw scatter
-            drawScatter(dataset, window.country, years, svg);   
+            // Update map, circular packing and scatter
+            drawMap(dataset, years, window.country, svgScatter, svgCirclePacking);
+            drawCircularPacking(dataset, years, window.country, svgScatter, svgCirclePacking);
+            drawScatter(dataset, years, window.country, window.variety, svgScatter);   
+
         });
-        
     });
 };

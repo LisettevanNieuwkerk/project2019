@@ -17,3 +17,16 @@
     * Added scatterplot and connected to worldmap and timeline. 
     * Problem: amount of data in scatterplot
     * Feedback: do not plot seperate wines on scatterplot but groups and make it possible to zoom in on price.
+
+* 11/6
+    * Make groups for scatterplot and add zoom function for x-Axis
+
+* 12/6
+    * Feedback: also make zoom possible for Y-axis.
+    * Adapt zoom function for scatterplot. Add pop up modal with list of wines when clicked on dot.
+
+* 13/6
+    * Started with piechart but not functional with amount of different variety of grapes. Created circular packing instead.
+
+* 14/6
+    * Cleaned code and connect circular packing with scatterplot, timeline and map.
