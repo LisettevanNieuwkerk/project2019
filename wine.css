@@ -3,13 +3,109 @@ Name: Lisette van Nieuwkerk
 Studentnumber: 10590919
 */
 
-/* World map */
-#container {
-    height: 800px;
-    width: 1200px;
-    position: relative;
+/* Body and navigator */
+body {
+  background-color:  #e6e6e6
 }
 
+.nav {
+  height: 40px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  
+}
+.nav li {
+  float: left;
+}
+.nav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 10px;
+}
+.nav li a:hover {
+    background-color: #111;
+}
+
+
+/* Item container */
+.items--row {
+  width: 95%;
+  margin: auto;
+  margin-top:10px;
+}
+.items--row > *  {
+  background-color:  white;
+  border: 1px solid white;
+  border-radius: 3px; 
+  float:left;
+  margin-bottom: 10px;
+  position: relative;
+}
+.items--infocontainer {
+  height: 300px;
+  width: 320px;
+  margin-right:15px;
+}
+.items--scattercontainer {
+  height: 300px;
+  width: 1015px;
+}
+.items--mapcontainer {
+  height: 450px;
+  width: 875px;
+  margin-right:15px;
+}
+.items--circularcontainer {
+  height: 450px;
+  width: 460px;
+}
+.itemtitle {
+  font-size: 20px;
+  font-family: Arial;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  top: 5px;
+  left: 20px;
+}
+
+
+/* Info container */
+p {
+  font-size: 13px;
+}
+#slider {
+  height: 10px;
+  width: 300px;
+}
+
+/* Map container */
+.legend {
+  position: absolute;
+  bottom: 40px;
+  left: 20px; 
+}
+.legendlabels {
+  font-family: Arial;
+  font-size: 11px;
+  font-weight: bold; 
+} 
+
+/* Scatter container */
+.scatterlabels {
+  font-family: Arial;
+  font-size: 13px;
+  font-style: italic;  
+}
+
+/* Circular container */
+
+
+/* Tooltips */
 .tooltip {
     position: absolute;
     min-width: 80px;
@@ -21,6 +117,7 @@ Studentnumber: 10590919
     font-family: sans-serif;
     font-size: 14px;
 }
+
 
 /* The Modal (background) */
 .modal {
@@ -58,3 +155,5 @@ Studentnumber: 10590919
     text-decoration: none;
     cursor: pointer;
   }
+
+/* Drowdown button */

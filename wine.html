@@ -1,14 +1,12 @@
 <!--
-WILDCARD
 Name: Lisette van Nieuwkerk
 Studentnumber: 10590919
-Purpose: To investigate if there is a link between the average score of life satisfaction in countries
-// and the financial situation of the people.
+Purpose: 
 -->
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
     <head>
     <meta charset="utf-8">
     
@@ -33,7 +31,17 @@ Purpose: To investigate if there is a link between the average score of life sat
         console.log('v5', d3v5.version);
         </script>
 
-        <!-- REST OF IMPORTS HERE -->
+        <!-- Bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+       
+        <!-- rest -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
         <link href="noUiSlider-13.1.5/distribute/nouislider.min.css" rel="stylesheet">
         <script src="noUiSlider-13.1.5/distribute/nouislider.min.js"></script>
@@ -43,24 +51,45 @@ Purpose: To investigate if there is a link between the average score of life sat
 
     <body>
         <!-- CONTENT OF PAGE HERE -->
-        <h1>Wine</h1>
 
-        <div id="slider">
-        </div>
+        <ul class="nav">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#news">News</a></li>
+        </ul>
 
-        <div id="container">
-        </div>
-        
-        <div id="myModal" class="modal">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-              <span class="close">&times;</span>
-              <p id="modal-text"></p>
+        <div class="items">
+            <div class='items--row'>
+                <div class="items--infocontainer"> 
+                    <h1 class="itemtitle">Wines of the world</h1>
+                    <p><i>Uitleg</i></p>
+                    <div id="slider"></div>
+                    <select name="country" id="selectedCountry">
+                        <option value="country">All</option>
+                    </select>
+                    <button type="button" id="selectCountryButton">Apply </button>
+                </div>
+                <div class="items--scattercontainer"></div>
             </div>
-          
+
+            <div class='items--row'>
+                <div class="items--mapcontainer" id="mapcontainer"></div>
+                <div class="items--circularcontainer"></div>
+            </div>
         </div>
 
-        <script type="module" src="wine.js"></script>
+
+
+            
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="modal-text"></p>
+                </div>
+            
+            </div>
+        
+            <script type="module" src="wine.js"></script> 
     </body>
 </html>

@@ -10,14 +10,82 @@ from contextlib import closing
 import json
 import numpy as np
 import re
+from requests import get
+from requests.exceptions import RequestException
+from bs4 import BeautifulSoup
 
+TARGET_URL = "https://en.wikipedia.org/wiki/List_of_grape_varieties#White_grapes"
+BACKUP_HTML = 'varieties.html'
+OUTPUT_CSV = 'varieties.csv'
 
 INPUT_FILE1 = 'data/wine-reviews-130.csv'
 INPUT_FILE2 = 'data/countrycode.txt'
 OUTPUT_JSON = 'data/wine-reviews.json'
 
+def simple_get(url):
+    """
+    Attempts to get the content at `url` by making an HTTP GET request.
+    If the content-type of response is some kind of HTML/XML, return the
+    text content, otherwise return None
+    """
+    try:
+        with closing(get(url, stream=True)) as resp:
+            if is_good_response(resp):
+                return resp.content
+            else:
+                return None
+    except RequestException as e:
+        print('The following error occurred during HTTP GET request to {0} : {1}'.format(url, str(e)))
+        return None
+
+def is_good_response(resp):
+    """
+    Returns true if the response seems to be HTML, false otherwise
+    """
+    content_type = resp.headers['Content-Type'].lower()
+    return (resp.status_code == 200
+            and content_type is not None
+            and content_type.find('html') > -1)
+
+def extract_varieties(dom):
+    red_grapes = []
+    white_grapes = []
+
+    red = True
+    for table in dom.find_all('table', limit=2):
+        tablebody = table.find('tbody')
+        for row in tablebody.find_all('tr'):
+            for varietyname in row.find_all('td', limit=1):
+                varieties = varietyname.get_text().replace('\n', '')
+                varieties = re.split(' / |, ',varieties)
+                if varieties != ['']:
+                    if red == True:
+                        red_grapes += varieties
+                    else:
+                       white_grapes += varieties
+        red = False
+
+
+    return [red_grapes, white_grapes]
 
 if __name__ == "__main__":
+    html = simple_get(TARGET_URL)
+
+    with open(BACKUP_HTML, 'wb') as f:
+        f.write(html)
+
+    # parse the HTML file into a ;DOM representation
+    dom = BeautifulSoup(html, 'html.parser')
+
+    grape_types = extract_varieties(dom)
+    red_grapes = grape_types[0]
+    white_grapes = grape_types[1]
+
+    for white_grape in white_grapes:
+        if white_grape in red_grapes:
+            white_grapes.remove(white_grape)
+            red_grapes.remove(white_grape)
+
     # Read text file with countrycodes
     country_codes = []
     with open(INPUT_FILE2, "r") as infile:
@@ -35,6 +103,34 @@ if __name__ == "__main__":
     columns = ['country', 'description', 'points', 'price', 'title', 'variety']
     df = df.filter(items=columns)
     df = df.drop_duplicates()
+
+    # Append grapetype to dataframe
+    listed_grapes = []
+
+    for variety in df['variety']:
+        grape_type = np.nan
+        found = False
+
+        for red_grape in red_grapes:
+            if str(red_grape).lower() in str(variety).lower():
+                found = True
+                grape_type = 'red'
+                break
+        
+        if found == False:
+            for white_grape in white_grapes:
+                if str(white_grape).lower() in str(variety).lower():
+                    grape_type = 'white'
+                    break
+
+        if grape_type != grape_type:
+            if 'red' in str(variety).lower() or 'carmenère' in str(variety).lower() or 'g-s-m' in str(variety).lower() or 'mencía' in str(variety).lower() or 'norton' in str(variety).lower():
+                grape_type = 'red'
+            if 'white' in str(variety).lower() or 'blanc' in str(variety).lower():
+                grape_type = 'white'
+
+        
+        listed_grapes.append(grape_type)
 
     # Append countrycodes to dataframe
     listed_codes = []
@@ -82,10 +178,12 @@ if __name__ == "__main__":
                             if possible_year > year:
                                 year = possible_year
         listed_years.append(year)
-    
+
+
     # Append years and countrycode to dataframe
     df['countryCode'] = listed_codes
     df['year'] = listed_years
+    df['grapeType'] = listed_grapes
 
     # Drop empty values
     df = df.dropna()

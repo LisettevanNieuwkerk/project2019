@@ -1,43 +1,56 @@
-/* Function to draw legend */
 import { drawScatter } from "./scatterplot.js";
-import { drawCircularPacking } from "./piechart.js";
+import { drawCircularPacking } from "./circularpacking.js";
 
-export function drawLegend(color) {
+
+/* Function to draw legend and title of map */
+export function drawMapAttributes() {
+    var mapcontainer = d3v5.select(".items--mapcontainer")
+    
+    // Title of map
+    mapcontainer.append('text')
+        .attr("class", "itemtitle")
+        .attr("transform", "translate(0, 20)")
+        .text("Worldwide wine map");
+
+    // Set color scale for map
+    var color = d3v5.scaleOrdinal()
+        .domain(['No data', '> 86', '86 - 89', '< 89'])
+        .range(['#d9d9d9','#cbc9e2','#9e9ac8', '#6a51a3']);
+
     // Draw svg figure for legend
-    var width = 1183;
-    var height = 30;
-    var legend = d3v5.select("body").append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
+    var width = 130;
+    var height = 160;
+    var legend = mapcontainer.append("svg")
+        .attr("class", "legend")
+        .attr("width", width)
+        .attr("height", height);
   
-    // Append title
+    // Append title legend
     legend.append('text')
-          .attr("class", "labels")
-          .attr("transform", "translate(50, 18)")
-          .text("Average wine rating");
-  
-    // Append blocks
-    var heightBlocks = 3;
-    var sizeBlocks = 25;
+        .attr("class", "legendlabels")
+        .attr("transform", "translate(0, 20)")
+        .text("Average wine rating");
+
+    // Append blocks legend
+    var widthBlocks = 25;
+    var heightBlocks = 30;
     var legend = legend.selectAll("legend")
-                      .data(color.domain())
-                      .enter()
-                      .append("g")
-                      .attr("transform", function(d, i) {
-                        var x = (i * 200) + 300;
-                        return "translate(" + x + "," + heightBlocks + ")";
-                      });
-  
+        .data(color.domain())
+        .enter()
+        .append("g")
+        .attr("transform", function(d, i) {
+        var y = (i * 30) + 30;
+        return "translate(0," + y + ")";
+        });
     legend.append("rect")
-          .attr("width", sizeBlocks)
-          .attr("height", sizeBlocks)
-          .style("fill", color)
-          .style("stroke", "black");
+        .attr("width", widthBlocks)
+        .attr("height", heightBlocks)
+        .style("fill", color);
   
-    // Append text
+    // Append text legend
     legend.append('text')
-          .attr("class", "labels")
-          .attr("x", 40)
+          .attr("class", "legendlabels")
+          .attr("x", 35)
           .attr("y", 18)
           .text(function(d) { return d; });
 }
@@ -45,14 +58,12 @@ export function drawLegend(color) {
 
 /* Define values per country */
 export function defineValuesCountries(dataset, years) {
-    var minYear = years[0]
-    var maxYear = years[1]
-
     // Sort ratings per country
+    var minYear = years[0];
+    var maxYear = years[1];
     var valuesCountries = {};
     var points;
     var countryCode;
-    var points;
     for (var i in dataset) {
         if (dataset[i]['year'] >= minYear && dataset[i]['year'] <= maxYear) {
             countryCode = dataset[i]['countryCode'];
@@ -79,13 +90,13 @@ export function defineValuesCountries(dataset, years) {
 
         // Define fillcolor based on average
         if (avg < 86) {
-            fillColor = '#66c2a4';
+            fillColor = '#cbc9e2';
         }
         else if (avg >= 86 && avg < 89) {
-            fillColor = '#2ca25f';
+            fillColor = '#9e9ac8';
         }
         else {
-            fillColor = '#006d2c';
+            fillColor = '#6a51a3';
         }
 
         // Add values to dict
@@ -93,27 +104,32 @@ export function defineValuesCountries(dataset, years) {
         valuesCountries[countryCode]['fillColor'] = fillColor
         valuesCountries[countryCode]['totalReviews'] = totalReviews
     }
-
     return valuesCountries
 }
 
 
 /* Draw datamap */
-export function drawMap(dataset, years, country, svgScatter, svgCirclePacking) {
-    var values;
+export function drawMap(dataset, years, svgScatter, svgCirclePacking) {
     var data = defineValuesCountries(dataset, years);
+
+    for (var i in data) {
+        var option = document.createElement("option");
+        option.text = data[i]['country'];
+        document.getElementById("selectedCountry").add(option);
+    }
+    
     // Draw datamap
     var basic = new Datamap({
-        element: document.getElementById("container"),
-        fills: { defaultFill: '#CDCCCC' },
+        element: document.getElementById("mapcontainer"),
+        fills: { defaultFill: '#d9d9d9' },
         data: data,
         geographyConfig: {
         // Show desired information in tooltip
             popupTemplate: function(i, data) {
                 // Don't show tooltip if country not present in dataset
                 if (!data) { return ['<div class="hoverinfo">',
+                'Country: <strong>'+ i.properties.name +'</strong><br>',
                 '<strong>No data available</strong>',
-                '<br>Country: <strong>'+ i.properties.name +'</strong>',
                 '</div>'].join('') };
                 // Tooltip content
                 return ['<div class="hoverinfo">',
@@ -121,20 +137,17 @@ export function drawMap(dataset, years, country, svgScatter, svgCirclePacking) {
                 'Average winerating: <strong>'+ data.points +'</strong><br>',
                 'Total reviewed wines: <strong>'+ data.totalReviews+'</strong>',
                 '</div>'].join('');
-
             }    
         },
-        // Draw barchart when clicked on country
+        // Adapt scatterplot and circularpacking when clicked on country
         done: function(datamap) {
                 datamap.svg.selectAll('.datamaps-subunit').on('click', function(geo) {
-                values = data[geo.id];
-                if (values != undefined) {
+                if (data[geo.id] != undefined) {
                     window.country = data[geo.id]['country'];
-                    drawScatter(dataset, years, window.country, window.variety, svgScatter);
-                    drawCircularPacking(dataset, years, window.country, svgScatter, svgCirclePacking);   
+                    drawScatter(dataset, years, window.variety, svgScatter);
+                    drawCircularPacking(dataset, years,svgScatter, svgCirclePacking);   
                 }
             })
         }   
     });
-
   }
