@@ -5,7 +5,7 @@ import { drawMapAttributes, drawMap, updateMap } from "./datamap.js";
 import { drawScatterBasis, drawScatter } from "./scatterplot.js";
 import { drawCircularPackingBasis, drawCircularPacking } from "./circularpacking.js";
 
-var fileName = "../../data/wine-reviews.json";
+var fileName = "/../data/wine-reviews.json";
 
 /* Load page */
 window.onload = function() {
