@@ -24,5 +24,3 @@
   * Possible technical problems: Linking all charts properly to each other and update by clicking. Also fit data (130.000 reviews) in charts.
 
   GitHub pages: https://LisettevanNieuwkerk.github.io/DataProcessing https://github.com/LisettevanNieuwkerk/DataProcessing
-
-<p><a href="code/html/wine.html"</a>wine.html</p>
