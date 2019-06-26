@@ -23,4 +23,4 @@
       * Connect a interactive world map to charts and click to update charts.
   * Possible technical problems: Linking all charts properly to each other and update by clicking. Also fit data (130.000 reviews) in charts.
 
-  GitHub pages: https://LisettevanNieuwkerk.github.io/DataProcessing https://github.com/LisettevanNieuwkerk/DataProcessing
+  GitHub pages: https://LisettevanNieuwkerk.github.io/project2019  
