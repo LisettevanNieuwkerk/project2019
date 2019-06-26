@@ -1,0 +1,209 @@
+/*
+Name: Lisette van Nieuwkerk
+Studentnumber: 10590919
+*/
+
+/* Body and navigator */
+body {
+  background-color:  #e6e6e6
+}
+
+.nav {
+  height: 40px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  
+}
+.nav li {
+  float: left;
+}
+.nav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 10px;
+}
+.nav li a:hover {
+    background-color: #111;
+}
+
+
+/* Item container */
+.items--row {
+  width: 95%;
+  margin: auto;
+  margin-top:10px;
+}
+.items--row > *  {
+  background-color:  white;
+  border: 1px solid white;
+  border-radius: 3px; 
+  float:left;
+  margin-bottom: 10px;
+  position: relative;
+}
+.items--infocontainer {
+  height: 300px;
+  width: 320px;
+  margin-right:15px;
+}
+.items--scattercontainer {
+  height: 300px;
+  width: 1015px;
+}
+.items--mapcontainer {
+  height: 450px;
+  width: 875px;
+  margin-right:15px;
+}
+.items--circularcontainer {
+  height: 450px;
+  width: 460px;
+}
+.itemtitle {
+  font-size: 20px;
+  font-family: Arial;
+  font-weight: bold;
+  position: absolute;
+  top: 5px;
+  left: 15px;
+}
+
+
+/* Info container */
+.items--infocontainer div:not(:first-child) {
+  margin-left: 15px;
+}
+p {
+  font-size: 12px;
+}
+.introduction {
+  margin-top: 35px;
+}
+.items--slider {
+  margin-top: -5px;
+}
+#slider {
+  height: 10px;
+  width: 80%;
+  margin-top: -5px;
+}
+.noUi-target {
+  background: #e6e6e6;
+}
+.noUi-handle {
+  border-radius: 50%;
+}
+#minYear, #maxYear {
+  display: inline-block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+#maxYear {
+ margin-left: 210px;
+}
+
+/*https://www.w3schools.com/css/css3_buttons.asp*/
+.selectCountryButton {
+  background-color:#333; 
+  border: none;
+  color: white;
+  padding: 3px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.selectCountryButton:hover {
+  background-color: #111;
+}
+
+/* Map container */
+.legend {
+  position: absolute;
+  bottom: 40px;
+  left: 20px; 
+}
+.legendlabels {
+  font-family: Arial;
+  font-size: 11px;
+  font-weight: bold; 
+} 
+
+/* Scatter container */
+.scatterlabels {
+  font-family: Arial;
+  font-size: 13px;
+  font-style: italic;  
+}
+.scattercircle {
+  opacity: 0.6;
+  fill: #252525;
+}
+
+/* Circular container */
+.circularLegend{
+  margin-left: 230px;
+}
+.node {
+  fill-opacity: 0.8;
+  stroke: #252525;
+  stroke-width: 1;
+}
+
+/* Tooltips */
+.tooltip {
+    position: absolute;
+    min-width: 80px;
+    height: auto;
+    background: #ffffff;
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+/* source: https://www.w3schools.com/howto/howto_css_modals.asp */
+/* The Modal (background) */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
