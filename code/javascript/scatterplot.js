@@ -1,73 +1,4 @@
-/* Function to calculate min and max value*/
-export function minMax(data, value) {
-    var current;
-    var max;
-    var min;
-    var first = true;
-  
-    for (var c in data) {
-        current = value(data, c);
-        if (first == true) {
-            max = current;
-            min = current;
-            first = false;
-        }
-        else {
-            if (current > max) {
-            max = current;
-            }
-            else if (current < min) {
-                min = current;
-            }
-        }
-    }
-    return [min, max];
-}
-
-
-/* Function to group wine by price and quality*/
-export function groupWine(dataset, country, variety, minYear, maxYear) {
-    var groupedWines = {};
-    for (var i in dataset) {
-        if (dataset[i]['year']>= minYear && dataset[i]['year'] <= maxYear) {
-            var key = [dataset[i]['points'], dataset[i]['price']]
-            if (country == 'all') {
-                if (variety == 'all') {
-                    add_to_dict(dataset, groupedWines, key, i);
-                }
-                else {
-                    if (dataset[i]['variety'] == variety) {
-                        add_to_dict(dataset, groupedWines, key, i);
-                    }    
-                }
-            }
-            else {
-                if (dataset[i]['country'] == country) {
-                    if (variety == 'all') {
-                        add_to_dict(dataset, groupedWines, key, i);
-                    }
-                    else {
-                        if (dataset[i]['variety'] == variety) {
-                            add_to_dict(dataset, groupedWines, key, i);
-                        }    
-                    }
-                }
-            }     
-        }
-
-    }
-    return groupedWines 
-}
-
-function add_to_dict(dataset, groupedWines, key, i) {
-    if (!groupedWines.hasOwnProperty(key)) {
-        groupedWines[key] = [{ title : dataset[i]['title']}]
-    }
-    else {
-        groupedWines[key].push({ title : dataset[i]['title']})
-    }
-}
-
+import { minMax, groupWine } from "./processdata.js";
 
 /* Draw containerscattter, labels and title*/
 export function drawScatterBasis() {
@@ -98,19 +29,7 @@ export function drawScatterBasis() {
 }
 
 
-/* Draw scatterplot */
-export function drawScatter(dataset, years, variety, svgScatter, tooltip) {
-    country = window.country;
-    var minYear = years[0];
-    var maxYear = years[1];
-
-    // Remove old axises and circles
-    d3v5.selectAll(".axis").remove();
-    d3v5.selectAll(".circle").remove();
-
-    // Sort wines in groups by price and points
-    var groupedWines = groupWine(dataset, country, variety, minYear, maxYear);
-
+export function createScales(groupedWines, sizesScatter) {
     // Find mininimum maximum values of amount in groups and prices
     var data, c;
     function prices(data, c) {
@@ -124,68 +43,112 @@ export function drawScatter(dataset, years, variety, svgScatter, tooltip) {
     var miniMaxAmounts = minMax(groupedWines, amounts);
 
     // Size scale for groups of wine
-    var size = d3v5.scaleLinear()
+    var sizeScale = d3v5.scaleLinear()
     .domain([miniMaxAmounts[0], miniMaxAmounts[1]])
     .range([3,10]);
 
+    // Define scale and axis for y and x
+    var difference = miniMaxPrices[1] - miniMaxPrices[0];
+    var miniPrice = miniMaxPrices[0] - (difference * 0.01); 
+    var maxiPrice = miniMaxPrices[1] + (difference * 0.05);
+
+    var xScale = d3v5.scaleLinear()
+        .domain([miniPrice, maxiPrice])
+        .range([sizesScatter[0], sizesScatter[1]])
+
+    var yScale = d3v5.scaleLinear()
+        .domain([79, 101])
+        .range([sizesScatter[2], sizesScatter[3]]);
+
+    return([sizeScale, yScale, xScale])
+}
+
+
+/* Draw scatterplot */
+export function drawScatter(dataset, years, svgScatter, tooltip, first) {
+    var xAxis, yAxis, scatter; 
+
+    // Divide wine into groups based on quality and price
+    var groupedWines = groupWine(dataset, years);
+
     //Size scatterplot
-    var paddingRight = 965;
     var paddingLeft = 45;
+    var paddingRight = 965;
     var paddingBottom = 260;
     var paddingTop = 30;
 
-    // Define scale and axis for y and x
-    var miniPrice = miniMaxPrices[0] - 30;
-    var maxiPrice = miniMaxPrices[1] + (miniMaxPrices[1] * 0,1);
-    var yScale = d3v5.scaleLinear()
-        .domain([79, 101])
-        .range([paddingBottom, paddingTop]);
-    var yAxis = svgScatter.append("g")
-        .attr("class", "axis")
-        .attr("transform","translate("+ paddingLeft +", 0)")
-        .call(d3v5.axisLeft(yScale));
+    var sizesScatter = [paddingLeft, paddingRight, paddingBottom, paddingTop]
 
-    var xScale = d3v5.scaleLinear()
-        .domain([-30, 3500])
-        .range([paddingLeft, paddingRight])
-    var xAxis = svgScatter.append("g")
-        .attr("class", "axis")
-        .attr("transform","translate(0, "+ paddingBottom +")")
-        .call(d3v5.axisBottom(xScale));
+    // Set scales scatterplot
+    var scales = createScales(groupedWines, sizesScatter);
+    var size = scales[0];
+    var yScale = scales[1];
+    var xScale = scales[2];
 
-    // Create clippath
-    var clip = svgScatter.append("defs").append("svg:clipPath")
-        .attr("id", "clip")
-        .append("svg:rect")
-        .attr("width", (paddingRight - paddingLeft) )
-        .attr("height", (paddingBottom - paddingTop) )
-        .attr("x", 45) 
-        .attr("y", 30); 
+    // When first scatterplot drawn
+    if (first == true) {
+        xAxis = svgScatter.append("g")
+            .attr("class", "axis")
+            .attr("transform","translate(0, "+ sizesScatter[2] +")")
+            .call(d3v5.axisBottom(xScale));
 
-    // Create scatterplot
-    var scatter = svgScatter.append("g")
-        .attr("clip-path", "url(#clip)");
+        yAxis = svgScatter.append("g")
+            .attr("class", "axis")
+            .attr("transform","translate("+ sizesScatter[0] +", 0)")
+            .call(d3v5.axisLeft(yScale));
 
-    // Create brush to zoom and adapt axises + circles when zoomed, add to scatter
-    window.idleTimeout;
-    var brush = d3v5.brush()
-        .extent([[paddingLeft, paddingTop], [paddingRight, paddingBottom]])
-        .on("end", function() {
-            var extent = d3v5.event.selection;
-            zoom(brush, extent, xScale, yScale, yAxis, xAxis, scatter);
-        });
+        // Create clippath
+        var clip = svgScatter.append("defs").append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
+            .attr("width", (sizesScatter[1] - sizesScatter[0]) )
+            .attr("height", (sizesScatter[2] - sizesScatter[3]) )
+            .attr("x", 45) 
+            .attr("y", 30); 
+
+        // Create area for scatterplotcontent
+        scatter = svgScatter.append("g")
+            .attr("class", "scattercontent")
+            .attr("clip-path", "url(#clip)");
+
+        // Create brush to zoom and adapt axises + circles when zoomed, add to scatter
+        window.idleTimeout;
+        var brush = d3v5.brush()
+            .extent([[sizesScatter[0], sizesScatter[3]], [sizesScatter[1], sizesScatter[2]]])
+            .on("end", function() {
+                var extent = d3v5.event.selection;
+                zoom(brush, extent, xScale, yScale, yAxis, xAxis, scatter);
+            });
 
         scatter.append("g")
-        .attr("class", "brush")
-        .call(brush);
+            .attr("class", "brush")
+            .call(brush);
+    }
+
+    // When first scatterplot already drawn
+    if (first == false) {
+        scatter = window.scatterplot[0];
+        xAxis = window.scatterplot[1];
+        yAxis = window.scatterplot[2];
+
+        // Update x- and y-axis
+        xAxis.transition()
+        .duration(1000)
+        .call(d3v5.axisBottom(xScale));
+
+        yAxis.transition()
+        .duration(1000)
+        .call(d3v5.axisLeft(yScale));
+    }
 
     // Create circles and interactivity
-    groupedWines = d3.entries(groupedWines);
-    scatter.selectAll("circle")
-        .data(groupedWines)
-        .enter()
+    groupedWines = d3v5.entries(groupedWines);
+    var scattercircles = scatter.selectAll("circle")
+        .data(groupedWines);
+
+    scattercircles.enter()
         .append("circle")
-        .attr("class", "circle")
+        .attr("class", "scattercircle")
         .on("mouseover", function(d) {
             tooltip.transition()
                 .duration(300)
@@ -202,10 +165,10 @@ export function drawScatter(dataset, years, variety, svgScatter, tooltip) {
                 .style("top", (d3v5.event.pageY - 28) + "px");
         })
         .on("mouseout", function(d) {
-             tooltip.transition()
-                 .duration(200)
-                 .style("opacity", 0);
-         })
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0);
+        })
         .on("click", function(d) {
             var content = document.getElementById("modal-text");
             content.innerHTML = '';
@@ -213,7 +176,8 @@ export function drawScatter(dataset, years, variety, svgScatter, tooltip) {
                 content.innerHTML += d['value'][i]['title'] + '<br>';
             }
             modal.style.display = "block";
-        })
+        }) 
+        .merge(scattercircles)
         .transition()
         .duration(1000)
         .attr("cx", function (d) {
@@ -228,13 +192,11 @@ export function drawScatter(dataset, years, variety, svgScatter, tooltip) {
         })
         .attr("r", function(d){ 
             return size(d['value'].length);
-        })
-        .style("opacity", 0.6)
-        .style("fill", "#252525");
+        });
 
+    scattercircles.exit().remove();
     
-
-    // Pop up modal
+    // Add pop up modal 
     var modal = document.getElementById("myModal");
     var span = document.getElementsByClassName("close")[0];
         span.onclick = function() {
@@ -244,11 +206,15 @@ export function drawScatter(dataset, years, variety, svgScatter, tooltip) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    } 
-}
+    
+    }
+
+    // Save values of scatterplot into global variable
+    window.scatterplot = [scatter, xAxis, yAxis];
+} 
 
 
-/* https://bl.ocks.org/EfratVil/d956f19f2e56a05c31fb6583beccfda7 */
+/* source: https://bl.ocks.org/EfratVil/d956f19f2e56a05c31fb6583beccfda7 */
 export function idled() {
     window.idleTimeout = null;
 }

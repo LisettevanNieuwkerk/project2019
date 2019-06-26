@@ -1,7 +1,7 @@
 # Name: Lisette van Nieuwkerk
 # Student number: 10590919
 """
-Convert csv with data to json file
+Preprocess data in python
 """
 
 import pandas as pd
@@ -15,7 +15,7 @@ from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
 
 TARGET_URL = "https://en.wikipedia.org/wiki/List_of_grape_varieties#White_grapes"
-BACKUP_HTML = 'varieties.html'
+BACKUP_HTML = 'data/varieties.html'
 OUTPUT_CSV = 'varieties.csv'
 
 INPUT_FILE1 = 'data/wine-reviews-130.csv'
@@ -48,6 +48,9 @@ def is_good_response(resp):
             and content_type.find('html') > -1)
 
 def extract_varieties(dom):
+    """
+    Extract grape type of varieties from dom
+    """
     red_grapes = []
     white_grapes = []
 
@@ -69,18 +72,20 @@ def extract_varieties(dom):
     return [red_grapes, white_grapes]
 
 if __name__ == "__main__":
+    # Get html page and write backup file
     html = simple_get(TARGET_URL)
 
     with open(BACKUP_HTML, 'wb') as f:
         f.write(html)
 
-    # parse the HTML file into a ;DOM representation
+    # Garse the HTML file into a ;DOM representation
     dom = BeautifulSoup(html, 'html.parser')
 
     grape_types = extract_varieties(dom)
     red_grapes = grape_types[0]
     white_grapes = grape_types[1]
 
+    # Gemove varieties who are both red and white
     for white_grape in white_grapes:
         if white_grape in red_grapes:
             white_grapes.remove(white_grape)
@@ -104,7 +109,7 @@ if __name__ == "__main__":
     df = df.filter(items=columns)
     df = df.drop_duplicates()
 
-    # Append grapetype to dataframe
+    # Append grapetype of variety to dataframe
     listed_grapes = []
 
     for variety in df['variety']:
@@ -180,16 +185,16 @@ if __name__ == "__main__":
         listed_years.append(year)
 
 
-    # Append years and countrycode to dataframe
-    df['countryCode'] = listed_codes
-    df['year'] = listed_years
+    # Append grape type, years and countrycode to dataframe
     df['grapeType'] = listed_grapes
+    df['year'] = listed_years
+    df['countryCode'] = listed_codes
 
-    # Drop empty values
+    # Drop empty values and change year to int
     df = df.dropna()
     df['year'] = df['year'].astype(np.int64)
 
-    # Write to json
+    # Write df to json
     output = df.to_json(orient='records')
     with open(OUTPUT_JSON, 'w') as j:
         j.write(output)

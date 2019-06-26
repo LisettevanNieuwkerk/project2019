@@ -1,16 +1,8 @@
-<!--
-Name: Lisette van Nieuwkerk
-Studentnumber: 10590919
-Purpose: 
--->
-
 <!DOCTYPE html>
 
 <html lang="en">
     <head>
     <meta charset="utf-8">
-    
-
         <!-- Import D3 V5 -->
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script>
@@ -21,7 +13,7 @@ Purpose:
         <!-- Import D3 V3 and TopoJSON -->
         <script src="https://d3js.org/d3.v3.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-        <script src="//lisettevannieuwkerk.github.io/DataProcessing/Homework/Week_6/datamaps.world.min.js"></script>
+        <script src="/code/javascript/datamaps.world.min.js"></script>
         <script>
         d3v3 = d3;
         window.d3 = null;
@@ -43,30 +35,42 @@ Purpose:
        
         <!-- rest -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-        <link href="noUiSlider-13.1.5/distribute/nouislider.min.css" rel="stylesheet">
-        <script src="noUiSlider-13.1.5/distribute/nouislider.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="wine.css">
-
+        <link href="/code/noUiSlider-13.1.5/distribute/nouislider.min.css" rel="stylesheet">
+        <script src="/code/noUiSlider-13.1.5/distribute/nouislider.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/code/css/wine.css">
     </head>
 
     <body>
-        <!-- CONTENT OF PAGE HERE -->
-
         <ul class="nav">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#news">News</a></li>
+                <li><a href="wine.html">Wine reviews</a></li>
+                <li><a href="info.html">Info</a></li>
         </ul>
 
         <div class="items">
             <div class='items--row'>
                 <div class="items--infocontainer"> 
-                    <h1 class="itemtitle">Wines of the world</h1>
-                    <p><i>Uitleg</i></p>
-                    <div id="slider"></div>
-                    <select name="country" id="selectedCountry">
-                        <option value="country">All</option>
-                    </select>
-                    <button type="button" id="selectCountryButton">Apply </button>
+                    <div class="items--intro">
+                        <div class="itemtitle">Wines of the world</div>
+                        <div class="introduction">
+                            <p><i>
+                            This page gives an overview of 100.000+ wine reviews. The average wine rating per country can be found in de worldwide wine map, while 
+                            the price quality ratio is displayed in the scatterplot. In the circular packing the used varieties are shown. 
+                            </p></i>
+                        </div>
+                    </div>
+                    <div class="items--slider">
+                        <p><b>Selected years:</b></p>
+                        <div id="slider"></div>
+                        <p id="minYear"></p>
+                        <p id="maxYear"></p>
+                    </div>
+                    <div class="items--drowdown">
+                        <p><b>Selected country:</b></p>
+                        <select name="country" class="dropdownCountry" id="selectedCountry">
+                            <option value="country">All</option>
+                        </select>
+                        <button type="button" class="selectCountryButton" id="selectCountryButton">Apply </button>
+                    </div>
                 </div>
                 <div class="items--scattercontainer"></div>
             </div>
@@ -77,19 +81,14 @@ Purpose:
             </div>
         </div>
 
-
-
-            
-            <div id="myModal" class="modal">
-
-                <!-- Modal content -->
-                <div class="modal-content">
+        <!-- Pop-up Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
                 <span class="close">&times;</span>
                 <p id="modal-text"></p>
-                </div>
-            
             </div>
+        </div>
         
-            <script type="module" src="wine.js"></script> 
+        <script type="module" src="/code/javascript/index.js"></script> 
     </body>
-</html>
+    </html>
