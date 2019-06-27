@@ -1,4 +1,6 @@
 # DESIGN project2019
+* Lisette van Nieuwkerk
+* 10590919
 
 1. Data sources
     * https://unstats.un.org/unsd/tradekb/Knowledgebase/Country-Code
