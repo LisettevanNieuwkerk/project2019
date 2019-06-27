@@ -30,3 +30,15 @@
 
 * 14/6
     * Cleaned code and connect circular packing with scatterplot, timeline and map.
+
+* 17/6
+    * Add function to scrape data from wikepedia in python for grape types (red or white).
+
+* 18/6
+    * Remove some wine when not clear which grape type the belong to.
+
+* 19/6
+    * Started working on design of whole dashboard with css.
+
+* 20/6
+    * Continue on design and css. Made improvements on updating scatterplot (with zoom).
